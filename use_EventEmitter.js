@@ -30,6 +30,50 @@ function findPattern (files, regex) {
 findPattern(
     ['./resources/urls.txt'],
     /baidu/g
-).on('fileread', file => console.log(file + ' was read'))
- .on('found', (file, match) => console.log('Matched "' + match + '" in file ' + file))
- .on('error', err => console.log('Error emitted: ' + err.message));
+)
+ .on('found', (file, elem) => console.log('Matched ' + elem + ' was found in ' + file))
+ .on('fileread', (file) => console.log('file ' + file + ' was read'))
+ .on('error', (err) => console.log('Error emitted: ' + err.message));
+
+ /**
+  * class 方式, extends EventEmitter
+  * api: 
+  * 1. addFile
+  * 2. find
+  * 3. return this实现链式调用
+  */
+
+class FindPattern extends EventEmitter {
+    constructor(regex) {
+        super();
+        this.regex = regex;
+        this.files = [];
+    }
+
+    addFile (file) {
+        this.files.push(file);
+        return this;
+    }
+
+    find () {
+        this.files.forEach(file => {
+            fs.readFile(file, 'utf8', (err, content) => {
+                if (err) return this.emit('error', err);
+
+                this.emit('fileread', file);
+                let match;
+                if (match = content.match(this.regex)) {
+                    match.forEach(elem => this.emit('found', file, elem))
+                }
+            })
+        })
+        return this;
+    }
+}
+let findPatternObj = new FindPattern (/baidu/g);
+findPatternObj
+  .addFile('./resources/urls.txt')
+  .find()
+  .on('found', (file, elem) => console.log('Matched ' + elem + ' was found in ' + file))
+  .on('fileread', (file) => console.log('file ' + file + ' was read'))
+  .on('error', (err) => console.log('Error emitted: ' + err.message));
