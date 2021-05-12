@@ -1,0 +1,32 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "dialect": "postgres",
+    "seederStorage": "sequelize",
+    "seederStorageTableName": "SequelizeData"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "dialect": "postgres",
+    "seederStorage": "sequelize",
+    "seederStorageTableName": "SequelizeData"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "dialect": "postgres",
+    "seederStorage": "sequelize",
+    "seederStorageTableName": "SequelizeData"
+  }
+}
